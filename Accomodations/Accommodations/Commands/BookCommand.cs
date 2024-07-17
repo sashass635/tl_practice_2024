@@ -3,7 +3,7 @@ using Accommodations.Models;
 
 namespace Accommodations.Commands;
 
-public class BookCommand(IBookingService bookingService, BookingDto bookingDto) : ICommand
+public class BookCommand( IBookingService bookingService, BookingDto bookingDto ) : ICommand
 {
     private Booking? _executedBookingDto;
 
@@ -16,16 +16,16 @@ public class BookCommand(IBookingService bookingService, BookingDto bookingDto) 
             CurrencyDto.Cny => Currency.Cny,
             _ => throw new ArgumentOutOfRangeException()
         };
-        _executedBookingDto = bookingService.Book(bookingDto.UserId, bookingDto.Category, bookingDto.StartDate,
-            bookingDto.EndDate, currency);
-        Console.WriteLine($"Booking successful: ID {_executedBookingDto!.Id}, cost: {_executedBookingDto.Cost}"); //Добавление отображения стоимости брони
+        _executedBookingDto = bookingService.Book( bookingDto.UserId, bookingDto.Category, bookingDto.StartDate,
+            bookingDto.EndDate, currency );
+        Console.WriteLine( $"Booking successful: ID {_executedBookingDto!.Id}, cost: {_executedBookingDto.Cost}" ); //Добавление отображения стоимости брони
     }
 
     public void Undo()
     {
-        bookingService.CancelBooking(_executedBookingDto.Id);
-        decimal cancellationPenalty = bookingService.CalculateCancellationPenaltyAmount(_executedBookingDto);
+        bookingService.CancelBooking( _executedBookingDto.Id );
+        decimal cancellationPenalty = bookingService.CalculateCancellationPenaltyAmount( _executedBookingDto );
         Console.WriteLine(
-            $"Booking {_executedBookingDto.Id} was canceled. Cancellation penalty: {cancellationPenalty}");
+            $"Booking {_executedBookingDto.Id} was canceled. Cancellation penalty: {cancellationPenalty}" );
     }
 }
