@@ -2,7 +2,8 @@
 {
     class Program
     {
-        const string filePath = "dictionary.txt";
+        const string DictionaryFilePath = "dictionary.txt";
+        const string YesResponse = "да";
         static Dictionary<string, string> dictionary = new Dictionary<string, string>();
 
         static void Main( string[] args )
@@ -13,20 +14,19 @@
 
             do
             {
-                Console.WriteLine( "Выберите команду или нажмите '0', чтобы их посмотреть: " );
+                PrintMenu();
+
+                Console.WriteLine( "Выберите команду: " );
                 string input = Console.ReadLine();
 
                 if ( !int.TryParse( input, out choice ) )
                 {
-                    Console.WriteLine( "Неверная команда. Повторите ввод.\n" );
+                    Console.WriteLine( "Команда должна быть целым числом. Повторите ввод.\n" );
                     continue;
                 }
 
                 switch ( choice )
                 {
-                    case 0:
-                        PrintMenu();
-                        break; ;
                     case 1:
                         InsertWord();
                         break;
@@ -43,7 +43,7 @@
                         Console.WriteLine( "Программа завершена." );
                         break;
                     default:
-                        Console.WriteLine( "Неверная команда. Повторите ввод.\n" );
+                        HandleInvalidInput();
                         break;
                 }
             } while ( choice != 5 );
@@ -53,9 +53,9 @@
         {
             try
             {
-                if ( File.Exists( filePath ) )
+                if ( File.Exists( DictionaryFilePath ) )
                 {
-                    string[] lines = File.ReadAllLines( filePath );
+                    string[] lines = File.ReadAllLines( DictionaryFilePath );
                     foreach ( string line in lines )
                     {
                         string[] parts = line.Split( ':' );
@@ -89,7 +89,7 @@
             Console.Write( "Введите перевод:" );
             string translation = Console.ReadLine();
 
-            if ( !dictionary.ContainsKey( word ) && !dictionary.ContainsValue( word ) )
+            if ( !dictionary.ContainsKey( word ) && !dictionary.ContainsKey( translation ) )
             {
                 dictionary[ word ] = translation;
                 dictionary[ translation ] = word;
@@ -98,7 +98,20 @@
             }
             else
             {
-                Console.WriteLine( "Слово уже существует." );
+                Console.WriteLine( "Слово уже существует. Хотите заменить перевод? (да/нет)" );
+                if ( Console.ReadLine().ToLower() == YesResponse )
+                {
+                    if ( dictionary.ContainsKey( word ) )
+                    {
+                        dictionary[ word ] = translation;
+                    }
+                    if ( dictionary.ContainsKey( translation ) )
+                    {
+                        dictionary[ translation ] = word;
+                    }
+                    SaveToFile();
+                    Console.WriteLine( "Перевод заменен." );
+                }
             }
         }
 
@@ -110,7 +123,7 @@
             }
             else
             {
-                foreach ( var word in dictionary )
+                foreach ( KeyValuePair<string, string> word in dictionary )
                 {
                     Console.WriteLine( $"{word.Key}: {word.Value}" );
                 }
@@ -129,7 +142,7 @@
             else
             {
                 Console.WriteLine( "Слово не найдено в словаре. Хотите добавить новое слово? (да/нет)" );
-                if ( Console.ReadLine().ToLower() == "да" )
+                if ( Console.ReadLine().ToLower() == YesResponse )
                 {
                     InsertWord();
                 }
@@ -147,9 +160,9 @@
         {
             try
             {
-                using ( var writer = new StreamWriter( filePath ) )
+                using ( StreamWriter writer = new StreamWriter( DictionaryFilePath ) )
                 {
-                    foreach ( var word in dictionary )
+                    foreach ( KeyValuePair<string, string> word in dictionary )
                     {
                         writer.WriteLine( $"{word.Key}:{word.Value}" );
                     }
@@ -159,6 +172,11 @@
             {
                 Console.WriteLine( $"Ошибка при записи в файл: {message.Message}" );
             }
+        }
+
+        static void HandleInvalidInput()
+        {
+            Console.WriteLine( "Неверная команда. Повторите ввод.\n" );
         }
     }
 }
