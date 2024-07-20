@@ -8,9 +8,9 @@
 
         static void Main( string[] args )
         {
-            int choice;
-
             LoadDictionary();
+
+            int choice;
 
             do
             {
@@ -103,12 +103,16 @@
                 {
                     if ( dictionary.ContainsKey( word ) )
                     {
-                        dictionary[ word ] = translation;
+                        string oldTranslation = dictionary[ word ];
+                        dictionary.Remove( oldTranslation );
                     }
                     if ( dictionary.ContainsKey( translation ) )
                     {
-                        dictionary[ translation ] = word;
+                        string oldWord = dictionary[ translation ];
+                        dictionary.Remove( oldWord );
                     }
+                    dictionary[ word ] = translation;
+                    dictionary[ translation ] = word;
                     SaveToFile();
                     Console.WriteLine( "Перевод заменен." );
                 }
