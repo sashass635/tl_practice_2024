@@ -4,7 +4,7 @@
 	room_number INT NOT NULL, 
 	room_type NVARCHAR(50) NOT NULL, 
 	price_per_night DECIMAL(20,2) NOT NULL, 
-	availability INT NOT NULL, 
+	availability BIT NOT NULL, 
 	
 	CONSTRAINT PK_rooms_room_id PRIMARY KEY (room_id)
  )
@@ -29,9 +29,9 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'Bookings')
 	check_out_date DATE NOT NULL, 
 	CONSTRAINT PK_bookings_booking_id PRIMARY KEY (booking_id),
 	
-	CONSTRAINT FK_Bookings_customer_id 
+	CONSTRAINT FK_bookings_customer_id 
 		FOREIGN KEY (customer_id) REFERENCES dbo.Customers (customer_id),
-	CONSTRAINT FK_Bookings_room_id
+	CONSTRAINT FK_bookings_room_id
 		FOREIGN KEY (room_id) REFERENCES dbo.Rooms (room_id)
  );
 
@@ -47,20 +47,20 @@ IF NOT EXISTS (SELECT * FROM sysobjects WHERE name = 'RoomsToFacilities')
  CREATE TABLE dbo.RoomsToFacilities (
  	room_id INT NOT NULL,
 	facility_id INT NOT NULL, 
-	CONSTRAINT PK_RoomsToFacilities_room_id PRIMARY KEY (room_id),
+	CONSTRAINT PK_roomsToFacilities_room_id PRIMARY KEY (room_id),
 
-	CONSTRAINT FK_RoomsToFacilities_room_id
+	CONSTRAINT FK_roomsToFacilities_room_id
 		FOREIGN KEY (room_id) REFERENCES dbo.Rooms (room_id),
-	CONSTRAINT FK_RoomsToFacilities_facility_id
+	CONSTRAINT FK_roomsToFacilities_facility_id
 		FOREIGN KEY (facility_id) REFERENCES dbo.Facilities (facility_id)
  );
 
 INSERT INTO dbo.Rooms (room_number, room_type, price_per_night, availability)
 VALUES	
-		('100', 'Standard', 75.00, 2),
-		('101', 'Superior', 105.50, 6),
+		('100', 'Standard', 75.00, 1),
+		('101', 'Superior', 105.50, 1),
 		('102', 'Deluxe', 300.75, 0),
-		('103', 'Suite', 120.20, 5);
+		('103', 'Suite', 120.20, 1);
 
 INSERT INTO dbo.Customers (first_name, last_name, email, phone_number) 
 VALUES	
@@ -112,7 +112,7 @@ SELECT * FROM dbo.Bookings JOIN dbo.Rooms
 
 --Найдите все номера, которые не забронированы на определенную дату.
 SELECT * FROM dbo.Rooms
-WHERE  availability > 0 AND room_id NOT IN (
+WHERE  availability <> 0 AND room_id NOT IN (
  SELECT room_id FROM dbo.Bookings 
  WHERE '2024-12-10' BETWEEN check_in_date AND check_out_date
  );
