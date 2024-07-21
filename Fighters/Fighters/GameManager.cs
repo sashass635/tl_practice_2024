@@ -11,37 +11,32 @@ namespace Fighters
 
         public void Run()
         {
-            string choice;
-
             PrintMenu();
+
+            string choice;
 
             do
             {
                 Console.Write( "\nВыберите команду: " );
 
-                choice = Console.ReadLine().ToLower();
+                choice = Console.ReadLine().ToLower().Trim();
                 switch ( choice )
                 {
                     case "add-fighter":
                         Fighter fighter = FightersProfile.AddNewFigher();
                         AddFighter( fighter );
                         break;
-
                     case "play":
                         Play();
                         break;
-
-                    case "fighters":
+                    case "list":
                         ShowFighters();
                         break;
-
                     case "delete":
                         fighters.Clear();
                         break;
-
                     case "exit":
                         return;
-
                     default:
                         Console.WriteLine( "Неизвестная команда." );
                         break;
@@ -54,7 +49,7 @@ namespace Fighters
             Console.WriteLine( "Доступные команды:" );
             Console.WriteLine( "add-fighter - Добавить нового бойца на арену" );
             Console.WriteLine( "play - Начать битву" );
-            Console.WriteLine( "fighters - Показать список бойцов" );
+            Console.WriteLine( "list - Показать список бойцов" );
             Console.WriteLine( "delete - Удаление бойцов с арены" );
             Console.WriteLine( "exit - Выйти" );
         }
@@ -67,8 +62,9 @@ namespace Fighters
 
         public void Play()
         {
-            if ( !fighters.IsCorrect() )
+            if ( !HasEnoughFighters() )
             {
+                Console.WriteLine( "Недостаточно бойцов для начала боя." );
                 return;
             }
 
@@ -81,30 +77,38 @@ namespace Fighters
                 for ( int i = 0; i < sortedFighters.Count(); i++ )
                 {
                     IFighter firstFighter = sortedFighters[ i ];
-                    if ( !firstFighter.IsAlive() ) continue;
+                    if ( !firstFighter.IsAlive() )
+                    {
+                        continue;
+                    }
 
                     IFighter secondFighter = sortedFighters.FirstOrDefault( f => f != firstFighter && f.IsAlive() );
 
                     int damageDone = firstFighter.CalculateDamage();
                     int damageTaken = secondFighter.TakeDamage( damageDone );
-                    Console.WriteLine( firstFighter.GetDamageInformation( secondFighter, damageTaken ) );
+                    Console.WriteLine( $"{firstFighter.Name} наносит {damageDone} урона {secondFighter.Name}. {secondFighter.Name} теперь имеет {secondFighter.GetCurrentHealth()} здоровья." );
 
                     if ( !secondFighter.IsAlive() )
                     {
                         Console.WriteLine( $"{secondFighter.Name} погибает." );
                         fighters.Remove( secondFighter );
+                        sortedFighters = fighters.Where( f => f.IsAlive() ).OrderByDescending( f => f.Initiative ).ToList();
                     }
                 }
             }
-            if ( fighters.Count == 1 )
+
+            IFighter winner = fighters.FirstOrDefault( f => f.IsAlive() );
+            Console.WriteLine( $"Победитель: {winner.Name}" );
+        }
+
+        public bool HasEnoughFighters()
+        {
+            if ( fighters.Count < 2 )
             {
-                IFighter winner = sortedFighters.FirstOrDefault( f => f.IsAlive() );
-                Console.WriteLine( $"Победитель: {winner.Name}" );
+                return false;
             }
-            else
-            {
-                Console.WriteLine( "Все бойцы погибли. Ничья." );
-            }
+
+            return true;
         }
 
         public void ShowFighters()
@@ -118,9 +122,7 @@ namespace Fighters
             {
                 foreach ( IFighter fighter in fighters )
                 {
-                    Console.WriteLine( $"Имя: {fighter.Name}" );
-                    Console.WriteLine( $"Здоровье: {fighter.GetCurrentHealth()}" );
-                    Console.WriteLine( $"Инициатива: {fighter.Initiative}" );
+                    Console.WriteLine( $"Имя: {fighter.Name}, Здоровье: {fighter.GetCurrentHealth()}, Инициатива: {fighter.Initiative}" );
                 }
             }
         }

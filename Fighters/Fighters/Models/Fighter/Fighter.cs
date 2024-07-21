@@ -8,11 +8,15 @@ namespace Fighters.Models.Fighters
 {
     public class Fighter : IFighter
     {
-        private static Random rnd = new Random();
         private IRace _race;
         private IArmor _armor;
         private IWeapon _weapon;
         private IFighterType _fighterType;
+
+        private static Random rnd = new Random();
+        private static readonly double MinMultiplierDamage = 0.80;
+        private static readonly double MaxMultiplierDamage = 1.10;
+        private static readonly int CriticalPercentChance = 10;
 
         private int _currentHealth;
 
@@ -29,8 +33,6 @@ namespace Fighters.Models.Fighters
             _currentHealth = _race.Health + _fighterType.Health;
             Initiative = CalculateInitiative();
         }
-
-        private int CalculateInitiative() => _fighterType.Initiative + rnd.Next( 1, 16 );
 
         public int CalculateArmor() => _armor.Armor + _race.Armor;
 
@@ -53,28 +55,20 @@ namespace Fighters.Models.Fighters
 
         public int CalculateDamage()
         {
-            const double MinMultiplierDamage = 0.80;
-            const double MaxMultiplierDamage = 1.10;
-            const int CriticalPercentChance = 10;
-
             int originalDamage = _race.Damage + _fighterType.Damage + _weapon.Damage;
-
             double attackMultiplier = rnd.Next( ( int )( MinMultiplierDamage * 100 ), ( int )( MaxMultiplierDamage * 100 + 1 ) ) / 100.0;
-            originalDamage = ( int )( originalDamage * attackMultiplier );
+            int modifiedDamage = ( int )( originalDamage * attackMultiplier );
+            bool isCriticialDamage = rnd.Next( 1, 101 ) < CriticalPercentChance;
 
-            bool criticalDamage = rnd.Next( 1, 101 ) < CriticalPercentChance;
-
-            if ( criticalDamage )
+            if ( isCriticialDamage )
             {
-                originalDamage *= 2;
+                modifiedDamage *= 2;
             }
 
-            return originalDamage;
+            return modifiedDamage;
         }
 
-        public string GetDamageInformation( IFighter fighter, int damageDone )
-        {
-            return ( $"{Name} наносит {damageDone} урона {fighter.Name}. {fighter.Name} теперь имеет {fighter.GetCurrentHealth()} здоровья." );
-        }
+        private int CalculateInitiative() => _fighterType.Initiative + rnd.Next( 1, 16 );
+
     }
 }

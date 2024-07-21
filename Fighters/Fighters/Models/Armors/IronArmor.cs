@@ -6,4 +6,3 @@
         public int Armor => 10;
     }
 }
-

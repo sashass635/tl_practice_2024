@@ -13,17 +13,12 @@ namespace Fighters.Models.FightersProfile
             Console.Write( "Введите имя персонажа: " );
             string fighterName = Console.ReadLine();
 
-            List<IRace> race = new() { new Human(), new Orc() };
-            IRace fighterRace = SelectOption( "Выберите расу:", race );
+            SetOfCharacteristics characteristics = new SetOfCharacteristics();
 
-            List<IWeapon> weapon = new() { new Fists(), new Sword() };
-            IWeapon fighterWeapon = SelectOption( "Выберите оружие:", weapon );
-
-            List<IArmor> armor = new() { new NoArmor(), new IronArmor() };
-            IArmor fighterArmor = SelectOption( "Выберите броню:", armor );
-
-            List<IFighterType> type = new() { new Knight(), new Mercenary() };
-            IFighterType fighterType = SelectOption( "Выберете бойца: ", type );
+            IRace fighterRace = SelectOption( "Выберите расу:", characteristics.GetRaces() );
+            IWeapon fighterWeapon = SelectOption( "Выберите оружие:", characteristics.GetWeapons() );
+            IArmor fighterArmor = SelectOption( "Выберите броню:", characteristics.GetArmors() );
+            IFighterType fighterType = SelectOption( "Выберите тип бойца:", characteristics.GetFighterTypes() );
 
             return new Fighter( fighterName, fighterRace, fighterWeapon, fighterArmor, fighterType );
         }

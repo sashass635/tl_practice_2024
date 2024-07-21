@@ -2,9 +2,9 @@
 {
     public interface IFighterType
     {
-        string Name { get; }
-        int Health { get; }
-        int Damage { get; }
-        int Initiative { get; }
+        public string Name { get; }
+        public int Health { get; }
+        public int Damage { get; }
+        public int Initiative { get; }
     }
 }

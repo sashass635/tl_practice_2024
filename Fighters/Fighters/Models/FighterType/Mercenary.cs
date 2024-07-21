@@ -5,6 +5,6 @@
         public string Name => "Наемник";
         public int Health => 35;
         public int Damage => 15;
-        public int Initiative { get; } = 10;
+        public int Initiative => 10;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Fighters.Models.Fighters;
+using FluentAssertions;
 
 namespace Fighters.Tests
 {
@@ -22,7 +23,7 @@ namespace Fighters.Tests
 
             // Assert
             string output = stringWriter.ToString();
-            Assert.AreEqual( "Недостаточно бойцов для начала боя.\r\n", output );
+            output.Should().Be( "Недостаточно бойцов для начала боя.\r\n" );
         }
 
 
@@ -42,8 +43,8 @@ namespace Fighters.Tests
 
             // Assert
             List<IFighter> winner = gameManager.GetFighters();
-            Assert.NotNull( winner );
-            Assert.AreEqual( 1, winner.Count );
+            winner.Should().NotBeNull();
+            winner.Count.Should().Be( 1 ); ;
         }
     }
 }

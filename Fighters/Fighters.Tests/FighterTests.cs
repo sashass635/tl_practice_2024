@@ -3,6 +3,7 @@ using Fighters.Models.FighterType;
 using Fighters.Models.Fighters;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
+using FluentAssertions;
 
 namespace Fighters.Tests
 {
@@ -18,13 +19,14 @@ namespace Fighters.Tests
             TestWeapon weapon = new TestWeapon();
             TestArmor armor = new TestArmor();
             TestFighterType fighterType = new TestFighterType();
+            int expectedHealth = race.Health + fighterType.Health;
 
             // Act
             Fighter fighter = new Fighter( "Fighter 1", race, weapon, armor, fighterType );
 
             // Assert
-            Assert.AreEqual( "Fighter 1", fighter.Name );
-            Assert.AreEqual( race.Health + fighterType.Health, fighter.GetCurrentHealth() );
+            fighter.Name.Should().Be( "Fighter 1" );
+            fighter.GetCurrentHealth().Should().Be( expectedHealth );
         }
 
         [Test]
@@ -60,14 +62,15 @@ namespace Fighters.Tests
             TestFighterType fighterType = new TestFighterType();
             Fighter fighter = new Fighter( "Fighter 1", race, weapon, armor, fighterType );
 
+            int minExpectedDamage = ( int )( ( race.Damage + fighterType.Damage + weapon.Damage ) * 0.80 );
+            int maxExpectedDamage = ( int )( ( race.Damage + fighterType.Damage + weapon.Damage ) * 2.20 );
+
             // Act
             int damage = fighter.CalculateDamage();
 
             // Assert
-            int minExpectedDamage = ( int )( ( race.Damage + fighterType.Damage + weapon.Damage ) * 0.80 );
-            int maxExpectedDamage = ( int )( ( race.Damage + fighterType.Damage + weapon.Damage ) * 2.20 );
-            Assert.GreaterOrEqual( damage, minExpectedDamage );
-            Assert.LessOrEqual( damage, maxExpectedDamage );
+            damage.Should().BeGreaterOrEqualTo( minExpectedDamage );
+            damage.Should().BeLessOrEqualTo( maxExpectedDamage );
         }
     }
 
@@ -98,5 +101,4 @@ namespace Fighters.Tests
         public int Health => 50;
         public int Initiative => 10;
     }
-
 }
