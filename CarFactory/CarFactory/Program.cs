@@ -4,7 +4,7 @@
     {
         static void Main( string[] args )
         {
-            CarFactory carFactory = new CarFactory();
+            CarManager carFactory = new CarManager();
             carFactory.Run();
         }
     }

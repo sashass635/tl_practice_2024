@@ -1,9 +1,8 @@
-﻿using CarFactory.Models.CarProfile;
-using CarFactory.Models.Cars;
+﻿using CarFactory.Models.Cars;
 
 namespace CarFactory
 {
-    public class CarFactory
+    public class CarManager
     {
         private List<ICar> cars = new List<ICar>();
 
@@ -27,7 +26,7 @@ namespace CarFactory
                 switch ( choice )
                 {
                     case 1:
-                        Car newCar = CarProfile.CreateNewCar();
+                        Car newCar = Models.CarFactory.CarFactory.CreateNewCar();
                         CreateNewCar( newCar );
                         break;
                     case 2:
@@ -46,12 +45,12 @@ namespace CarFactory
             } while ( choice != 4 );
         }
 
-        public void HandleInvalidInput()
+        private static void HandleInvalidInput()
         {
             Console.WriteLine( "Неверная команда. Повторите ввод.\n" );
         }
 
-        public void PrintMenu()
+        private static void PrintMenu()
         {
             Console.WriteLine( "1 - Cоздать автомобиль " );
             Console.WriteLine( "2 - Печать всех автомобилей" );
@@ -59,7 +58,7 @@ namespace CarFactory
             Console.WriteLine( "4 - Выход" );
         }
 
-        public void CreateNewCar( ICar car )
+        private void CreateNewCar( ICar car )
         {
             if ( cars.Any( existCar => existCar.Name == car.Name ) )
             {
@@ -71,7 +70,7 @@ namespace CarFactory
             Console.WriteLine( "Машина создана." );
         }
 
-        public void ShowAllCar()
+        private void ShowAllCar()
         {
             if ( cars.Count == 0 )
             {
@@ -86,7 +85,7 @@ namespace CarFactory
             }
         }
 
-        public void DeleteCar()
+        private void DeleteCar()
         {
             Console.Write( "Введите название автомобиля: " );
             string name = Console.ReadLine();

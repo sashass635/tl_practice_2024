@@ -5,16 +5,16 @@ using CarFactory.Models.Gearboxes;
 using CarFactory.Models.SteeringPosition;
 using CarFactory.Models.Cars;
 
-namespace CarFactory.Models.CarProfile
+namespace CarFactory.Models.CarFactory
 {
-    public class CarProfile
+    public class CarFactory : CarFactoryValidChoice
     {
         public static Car CreateNewCar()
         {
             Console.Write( "Введите название автомобиля: " );
             string carName = Console.ReadLine();
 
-            SetOfCharacteristics characteristics = new SetOfCharacteristics();
+            CarConfiguration characteristics = new CarConfiguration();
 
             IBodyShape bodyShape = SelectOption( "Выберите тип кузова:", characteristics.GetBodyShape() );
             ICarColor carColor = SelectOption( "Выберите цвет кузова:", characteristics.GetCarColor() );
@@ -35,22 +35,6 @@ namespace CarFactory.Models.CarProfile
 
             int choice = GetValidChoice( "Выберите вариант:", options.Count );
             return options[ choice ];
-        }
-
-        public static int GetValidChoice( string v, int maxChoice )
-        {
-            while ( true )
-            {
-                Console.Write( v );
-                if ( int.TryParse( Console.ReadLine(), out int choice ) && choice >= 0 && choice < maxChoice )
-                {
-                    return choice;
-                }
-                else
-                {
-                    Console.WriteLine( $"Введите корректное число от 0 до {maxChoice - 1}." );
-                }
-            }
         }
     }
 }

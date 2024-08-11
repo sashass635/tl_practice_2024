@@ -4,9 +4,9 @@ using CarFactory.Models.Engine;
 using CarFactory.Models.Gearboxes;
 using CarFactory.Models.SteeringPosition;
 
-namespace CarFactory.Models.CarProfile
+namespace CarFactory.Models.CarFactory
 {
-    public class SetOfCharacteristics
+    public class CarConfiguration
     {
         private List<IBodyShape> _bodyShapes;
         private List<ICarColor> _carColors;
@@ -14,11 +14,11 @@ namespace CarFactory.Models.CarProfile
         private List<IGearboxes> _gearboxes;
         private List<ISteeringPosition> _steeringPositions;
 
-        public SetOfCharacteristics()
+        public CarConfiguration()
         {
             _bodyShapes = new List<IBodyShape> { new Crossover(), new Hatchback(), new Sedan() };
             _carColors = new List<ICarColor> { new Black(), new Blue(), new White() };
-            _engines = new List<IEngine> { new Inline(), new Rotary(), new V_type() };
+            _engines = new List<IEngine> { new Inline(), new Rotary(), new Vtype() };
             _gearboxes = new List<IGearboxes> { new Automatic(), new Manual(), new Robotic() };
             _steeringPositions = new List<ISteeringPosition> { new Left(), new Right() };
         }

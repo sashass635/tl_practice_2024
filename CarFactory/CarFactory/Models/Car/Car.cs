@@ -32,14 +32,19 @@ namespace CarFactory.Models.Cars
 
         public void ShowCarConfigurations()
         {
-            Console.WriteLine( $"\nНазвание машины: {Name}" );
-            Console.WriteLine( $"Форма кузова: {_bodyShape.Name}" );
-            Console.WriteLine( $"Цвет машины: {_color.Name}" );
-            Console.WriteLine( $"Тип двигателя: {_engine.Name}" );
-            Console.WriteLine( $"Коробка передач: {_gearbox.Name}" );
-            Console.WriteLine( $"Позиция руля: {_steeringPosition.Name}" );
-            Console.WriteLine( $"Максимальная скорость: {GetMaxSpeed()} км/ч" );
-            Console.WriteLine( $"Количество передач: {GetGearsNumber()}" );
+            Console.WriteLine( ToString() );
+        }
+
+        public override string ToString()
+        {
+            return $"\nНазвание машины: {Name}\n" +
+                   $"Форма кузова: {_bodyShape.Name}\n" +
+                   $"Цвет машины: {_color.Name}\n" +
+                   $"Тип двигателя: {_engine.Name}\n" +
+                   $"Коробка передач: {_gearbox.Name}\n" +
+                   $"Позиция руля: {_steeringPosition.Name}\n" +
+                   $"Максимальная скорость: {GetMaxSpeed()} км/ч\n" +
+                   $"Количество передач: {GetGearsNumber()}";
         }
     }
 }
