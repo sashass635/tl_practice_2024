@@ -3,16 +3,16 @@ using Fighters.Models.FighterType;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 
-namespace Fighters.Models.FightersProfile
+namespace Fighters.Models.FighterFactory
 {
-    public class SetOfCharacteristics
+    public class FightersConfiguration
     {
         private List<IRace> _races;
         private List<IWeapon> _weapons;
         private List<IArmor> _armors;
         private List<IFighterType> _fighterTypes;
 
-        public SetOfCharacteristics()
+        public FightersConfiguration()
         {
             _races = new List<IRace> { new Human(), new Orc() };
             _weapons = new List<IWeapon> { new Fists(), new Sword() };

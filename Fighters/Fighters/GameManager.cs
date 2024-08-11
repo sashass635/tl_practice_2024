@@ -1,6 +1,6 @@
 ﻿using Fighters.Extensions;
+using Fighters.Models.FighterFactory;
 using Fighters.Models.Fighters;
-using Fighters.Models.FightersProfile;
 
 namespace Fighters
 {
@@ -23,7 +23,7 @@ namespace Fighters
                 switch ( choice )
                 {
                     case "add-fighter":
-                        Fighter fighter = FightersProfile.AddNewFigher();
+                        Fighter fighter = FighterFactory.AddNewFigher();
                         AddFighter( fighter );
                         break;
                     case "play":
@@ -44,7 +44,7 @@ namespace Fighters
             } while ( choice != "exit" );
         }
 
-        public void PrintMenu()
+        private void PrintMenu()
         {
             Console.WriteLine( "Доступные команды:" );
             Console.WriteLine( "add-fighter - Добавить нового бойца на арену" );
@@ -54,13 +54,13 @@ namespace Fighters
             Console.WriteLine( "exit - Выйти" );
         }
 
-        public void AddFighter( IFighter fighter )
+        private void AddFighter( IFighter fighter )
         {
             fighters.Add( fighter );
             Console.WriteLine( "Боец добавлен." );
         }
 
-        public void Play()
+        private void Play()
         {
             if ( !HasEnoughFighters() )
             {
@@ -101,7 +101,7 @@ namespace Fighters
             Console.WriteLine( $"Победитель: {winner.Name}" );
         }
 
-        public bool HasEnoughFighters()
+        private bool HasEnoughFighters()
         {
             if ( fighters.Count < 2 )
             {
@@ -111,7 +111,7 @@ namespace Fighters
             return true;
         }
 
-        public void ShowFighters()
+        private void ShowFighters()
         {
             if ( fighters.Count == 0 )
             {
@@ -127,7 +127,7 @@ namespace Fighters
             }
         }
 
-        public List<IFighter> GetFighters()
+        private List<IFighter> GetFighters()
         {
             return fighters;
         }

@@ -4,16 +4,16 @@ using Fighters.Models.FighterType;
 using Fighters.Models.Races;
 using Fighters.Models.Weapons;
 
-namespace Fighters.Models.FightersProfile
+namespace Fighters.Models.FighterFactory
 {
-    public class FightersProfile
+    public class FighterFactory : FighterFactoryValidChoice
     {
         public static Fighter AddNewFigher()
         {
             Console.Write( "Введите имя персонажа: " );
             string fighterName = Console.ReadLine();
 
-            SetOfCharacteristics characteristics = new SetOfCharacteristics();
+            FightersConfiguration characteristics = new FightersConfiguration();
 
             IRace fighterRace = SelectOption( "Выберите расу:", characteristics.GetRaces() );
             IWeapon fighterWeapon = SelectOption( "Выберите оружие:", characteristics.GetWeapons() );
@@ -33,22 +33,6 @@ namespace Fighters.Models.FightersProfile
 
             int choice = GetValidChoice( "Выберите вариант:", options.Count );
             return options[ choice ];
-        }
-
-        public static int GetValidChoice( string v, int maxChoice )
-        {
-            while ( true )
-            {
-                Console.Write( v );
-                if ( int.TryParse( Console.ReadLine(), out int choice ) && choice >= 0 && choice < maxChoice )
-                {
-                    return choice;
-                }
-                else
-                {
-                    Console.WriteLine( $"Введите корректное число от 0 до {maxChoice - 1}." );
-                }
-            }
         }
     }
 }
