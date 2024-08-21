@@ -11,15 +11,15 @@ const StartLearningProcess = (cardSet: CardSet): LearningProcess => {
     };
 };
 
-const UpdateCardStatusLearning = (process: LearningProcess, cardId: string, isCorrect: boolean): LearningProcess => {
+const MarkCardAsLearned = (process: LearningProcess, cardId: string): LearningProcess => {
     const card = process.unlearnedCards.find(card => card.id === cardId);
-    
+
     if (!card) 
     {
         return process;
     }
 
-    const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId).concat(isCorrect ? [] : [card]);
+    const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId);
 
     return {
         ...process,
@@ -27,7 +27,24 @@ const UpdateCardStatusLearning = (process: LearningProcess, cardId: string, isCo
     };
 };
 
+const MoveCardToBottom = (process: LearningProcess, cardId: string): LearningProcess => {
+    const card = process.unlearnedCards.find(card => card.id === cardId);
+
+    if (!card) 
+    {
+        return process;
+    }
+
+    const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId);
+    
+    return {
+        ...process,
+        unlearnedCards: [...updatedUnlearnedCards, card] 
+    };
+};
+
 export {
  StartLearningProcess,
- UpdateCardStatusLearning
+ MarkCardAsLearned, 
+ MoveCardToBottom
 }
