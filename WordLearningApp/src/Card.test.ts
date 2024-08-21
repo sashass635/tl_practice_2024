@@ -1,32 +1,35 @@
-import { СreateCard, UpdateCard, Card, DeleteCard } from "./Card";
+import { CreateCard, UpdateCard, Card, DeleteCard } from "./Card";
+import { CardSet } from "./CardSet";
 
 describe(`Card`, () => {
     describe(`СreateCard`, () => {
-      it(`should create a card `, () => {
-        const word = 'Hello';
-        const translation = 'Здравствуйте';
-        const card: Card = СreateCard(word, translation);
-        expect(card.word).toBe(word);
-        expect(card.translation).toBe(translation);
+        it(`should create a card `, () => {
+            const word = 'Hello';
+            const translation = 'Здравствуйте';
+            const set: CardSet = {id: '1', name: 'Test Set', cards: [] };
+            const updatedSetCard: CardSet = CreateCard(word, translation, set);
+            expect(updatedSetCard.cards).toHaveLength(1);
+            expect(updatedSetCard.cards[0].word).toBe(word);
+            expect(updatedSetCard.cards[0].translation).toBe(translation);
         });
     });
     describe('UpdateCard', () => {
         it('should update the translation of a card', () => {
-            const card: Card[] = [{ id: '1', word: 'fine', translation: 'хорошо' }];
-            const updatedCard: Card[] = UpdateCard(card, '1', undefined, 'штраф');
-            expect(updatedCard).toEqual([{ id: '1', word: 'fine', translation: 'штраф' }]); 
+            const set: CardSet  = {id: '1', name: 'Test Set', cards: [{ id: '1', word: 'fine', translation: 'хорошо' }]};
+            const updatedSet: CardSet = UpdateCard(set, '1', undefined, 'штраф');           
+            expect(updatedSet.cards).toEqual([{ id: '1', word: 'fine', translation: 'штраф' }]); 
         });
         it('should update the word of a card', () => {
-            const card: Card[] = [{ id: '2', word: 'blue', translation: 'печальный' }];
-            const updatedCard: Card[] = UpdateCard(card, '2', 'sad', undefined);
-            expect(updatedCard).toEqual([{ id: '2', word: 'sad', translation: 'печальный' }]);
+            const set: CardSet  = {id: '1', name: 'Test Set', cards: [{ id: '2', word: 'blue', translation: 'печальный' }]};
+            const updatedSet: CardSet = UpdateCard(set, '2', 'sad', undefined);
+            expect(updatedSet.cards).toEqual([{ id: '2', word: 'sad', translation: 'печальный' }]);
         });
     });
     describe('DeleteCard', () => {
         it('should delete card from the list', () => {
-            const card: Card[] = [{ id: '1', word: 'fine', translation: 'хорошо' }];
-            const deletedCard: Card[] = DeleteCard(card, '1');
-            expect(deletedCard.find(card => card.id === '1')).toBeUndefined();
+            const set: CardSet  = {id: '1', name: 'Test Set', cards: [{ id: '1', word: 'fine', translation: 'хорошо' }]};
+            const deletedCard: CardSet = DeleteCard(set, '1');
+            expect(deletedCard.cards.find(card => card.id === '1')).toBeUndefined();
         });
     });
 });

@@ -1,5 +1,5 @@
 import { CardSet } from "./CardSet";
-import { GetLearnedCards, MarkCardAsLearned, StartLearningProcess } from "./LearningProcess";
+import { GetUnlearnedCards, MarkCardAsLearned, StartLearningProcess } from "./LearningProcess";
 
 describe(`LearningProcess`, () => {
     describe('StartLearningProcess', () => {
@@ -9,32 +9,42 @@ describe(`LearningProcess`, () => {
             { id: '2', word: 'Please', translation: 'Пожалуйста' }
           ]};
           const process = StartLearningProcess(cardSet);
-          expect(process.learnedCards).toEqual([]);
           expect(process.unlearnedCards).toEqual(cardSet.cards);
         });
     });
     describe('MarkCardAsLearned', () => {
-        it('should move a card from unlearned to learned', () => {
+        it('should move a card from unlearned', () => {
             const cardSet: CardSet = { id: '1', name: 'Test Set', cards: [
                 { id: '1', word: 'Hello', translation: 'Здравствуйте' },
                 { id: '2', word: 'Please', translation: 'Пожалуйста' }
             ]};
             let process = StartLearningProcess(cardSet);
-            process = MarkCardAsLearned(process, '1');
-            expect(process.learnedCards).toEqual([{ id: '1', word: 'Hello', translation: 'Здравствуйте' }]);
+            process = MarkCardAsLearned(process, '1', true);
             expect(process.unlearnedCards).toEqual([{ id: '2', word: 'Please', translation: 'Пожалуйста' }]);
         });
+        it('should move a card from unlearned to the end of the list', () => {
+          const cardSet: CardSet = { id: '1', name: 'Test Set', cards: [
+              { id: '1', word: 'Hello', translation: 'Здравствуйте' },
+              { id: '2', word: 'Please', translation: 'Пожалуйста' }
+          ]};
+          let process = StartLearningProcess(cardSet);
+          process = MarkCardAsLearned(process, '1', false);
+          expect(process.unlearnedCards).toEqual([
+              { id: '2', word: 'Please', translation: 'Пожалуйста' },
+              { id: '1', word: 'Hello', translation: 'Здравствуйте' }
+          ]);
+        });
     });
-    describe('GetLearnedCards', () => {
-        it('should return all learned cards', () => {
+    describe('GetUnlearnedCards', () => {
+        it('should return all unlearned  cards', () => {
           const cardSet: CardSet = { id: '1', name: 'Test Set', cards: [
             { id: '1', word: 'Hello', translation: 'Здравствуйте' },
             { id: '2', word: 'Please', translation: 'Пожалуйста' }
           ]};
           let process = StartLearningProcess(cardSet);
-          process = MarkCardAsLearned(process, '1');
-          const learnedCards = GetLearnedCards(process);
-          expect(learnedCards).toEqual([{ id: '1', word: 'Hello', translation: 'Здравствуйте' }]);
+          process = MarkCardAsLearned(process, '1', true);
+          const unlearnedCards = GetUnlearnedCards(process);
+          expect(unlearnedCards).toEqual([{ id: '2', word: 'Please', translation: 'Пожалуйста' }]);
         });
     });
 });

@@ -15,24 +15,11 @@ const CreateSet = (name: string): CardSet => {
     };
 };
 
-const AddCardToSet = (cardSet: CardSet, card: Card): CardSet => {
-    return {
-        ...cardSet,
-        cards: [...cardSet.cards, card]
-    };
-}
-
 const DeleteSet = (cardSet: CardSet[], id: string): CardSet[] => {
     return cardSet.filter(cardSet => cardSet.id !== id);
 }
 
-const GetCardsInSet = (cardSet: CardSet): Card[] => {
-    return cardSet.cards;
-}
-
 export {
     CreateSet,
-    AddCardToSet,
-    DeleteSet,
-    GetCardsInSet
+    DeleteSet
 }

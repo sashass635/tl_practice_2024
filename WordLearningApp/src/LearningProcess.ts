@@ -2,18 +2,16 @@ import { Card } from "./Card";
 import { CardSet} from "./CardSet"
 
 export type LearningProcess = {
-    learnedCards: Card[];
     unlearnedCards: Card[];
 };
 
 const StartLearningProcess = (cardSet: CardSet): LearningProcess => {
     return {
-        learnedCards: [],
         unlearnedCards: [...cardSet.cards]
     };
 };
 
-const MarkCardAsLearned = (process: LearningProcess, cardId: string): LearningProcess => {
+const MarkCardAsLearned = (process: LearningProcess, cardId: string, isCorrect: boolean): LearningProcess => {
     const card = process.unlearnedCards.find(card => card.id === cardId);
     
     if (!card) 
@@ -21,21 +19,20 @@ const MarkCardAsLearned = (process: LearningProcess, cardId: string): LearningPr
         return process;
     }
 
-    const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId);
+    const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId).concat(isCorrect ? [] : [card]);
 
     return {
         ...process,
-        learnedCards: [...process.learnedCards, card],
         unlearnedCards: updatedUnlearnedCards 
     };
 };
 
-const GetLearnedCards = (process: LearningProcess): Card[] => {
-    return process.learnedCards;
-}
+const GetUnlearnedCards = (process: LearningProcess): Card[] => {
+    return process.unlearnedCards;
+};
 
 export {
  StartLearningProcess,
  MarkCardAsLearned,
- GetLearnedCards
+ GetUnlearnedCards
 }
