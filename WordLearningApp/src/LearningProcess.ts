@@ -11,7 +11,7 @@ const StartLearningProcess = (cardSet: CardSet): LearningProcess => {
     };
 };
 
-const MarkCardAsLearned = (process: LearningProcess, cardId: string, isCorrect: boolean): LearningProcess => {
+const UpdateCardStatusLearning = (process: LearningProcess, cardId: string, isCorrect: boolean): LearningProcess => {
     const card = process.unlearnedCards.find(card => card.id === cardId);
     
     if (!card) 
@@ -27,12 +27,7 @@ const MarkCardAsLearned = (process: LearningProcess, cardId: string, isCorrect: 
     };
 };
 
-const GetUnlearnedCards = (process: LearningProcess): Card[] => {
-    return process.unlearnedCards;
-};
-
 export {
  StartLearningProcess,
- MarkCardAsLearned,
- GetUnlearnedCards
+ UpdateCardStatusLearning
 }
