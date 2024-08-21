@@ -36,7 +36,7 @@ const MoveCardToBottom = (process: LearningProcess, cardId: string): LearningPro
     }
 
     const updatedUnlearnedCards = process.unlearnedCards.filter(card => card.id !== cardId);
-    
+
     return {
         ...process,
         unlearnedCards: [...updatedUnlearnedCards, card] 

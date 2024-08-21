@@ -33,9 +33,9 @@ describe(`LearningProcess`, () => {
                 { id: '3', word: 'Fine', translation: 'Штраф' }
             ]};
             let process = StartLearningProcess(cardSet);
-           
+
             process = MoveCardToBottom(process, '1');
-            
+
             expect(process.unlearnedCards).toEqual([
                 { id: '2', word: 'Please', translation: 'Пожалуйста' },
                 { id: '3', word: 'Fine', translation: 'Штраф' },
@@ -48,9 +48,9 @@ describe(`LearningProcess`, () => {
                 { id: '2', word: 'Please', translation: 'Пожалуйста' }
             ]};
             let process = StartLearningProcess(cardSet);
-    
+
             process = MoveCardToBottom(process, '3');
-    
+
             expect(process.unlearnedCards).toEqual([
                 { id: '1', word: 'Hello', translation: 'Здравствуйте' },
                 { id: '2', word: 'Please', translation: 'Пожалуйста' }
