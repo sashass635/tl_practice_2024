@@ -1,7 +1,5 @@
-﻿using Azure.Core;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
-using Infrastructure.Foundation.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;
 
@@ -42,6 +40,15 @@ namespace Theater.Controllers
         public IActionResult CreateTheater( [FromBody] CreateTheaterRequest theater )
         {
             var newTheater = new Domain.Entities.Theater( theater.Name, theater.Address, theater.OpeningDate, theater.Description, theater.PhoneNumber );
+
+            if ( theater.WorkingHours != null )
+            {
+                foreach ( var wh in theater.WorkingHours )
+                {
+                    var workingHours = new WorkingHours( wh.OpeningDate, wh.ClosingDate, wh.IsWeekend );
+                    newTheater.WorkingHours.Add( workingHours );
+                }
+            }
 
             _theaterRepository.Add( newTheater );
 

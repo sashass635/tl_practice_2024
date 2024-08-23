@@ -1,7 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using Theater.Contracts;
 using Theater.Contracts.Requests;
 
 namespace Theater.Controllers
@@ -56,7 +55,7 @@ namespace Theater.Controllers
         [HttpPost]
         public IActionResult CreatePlay( [FromBody] CreatePlayRequest play )
         {
-            Play newPlay = new Play( play.Name, play.StartDate, play.EndDate, play.TicketPrice, play.Description, play.TheaterId );
+            Play newPlay = new Play( play.Name, play.StartDate, play.EndDate, play.TicketPrice, play.Description, play.TheaterId, play.CompositionId );
 
             _playRepository.Add( newPlay );
 

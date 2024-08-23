@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Domain.Entities
 {
     public class Play
     {
@@ -9,10 +11,13 @@
         public decimal TicketPrice { get; private init; }
         public string Description { get; private init; }
         public int TheaterId { get; private init; }
+        [JsonIgnore]
+        public Theater Theater { get; private init; }
         public int CompositionId { get; private init; }
+        [JsonIgnore]
         public Composition Composition { get; private init; }
 
-        public Play( string name, DateTime startDate, DateTime endDate, decimal ticketPrice, string description, int theaterId )
+        public Play( string name, DateTime startDate, DateTime endDate, decimal ticketPrice, string description, int theaterId, int compositionId )
         {
             if ( string.IsNullOrWhiteSpace( name ) )
             {
@@ -38,8 +43,8 @@
             }
             StartDate = startDate;
             EndDate = endDate;
-
             TheaterId = theaterId;
+            CompositionId = compositionId;
         }
     }
 }

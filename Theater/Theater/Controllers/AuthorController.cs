@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using Domain;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;

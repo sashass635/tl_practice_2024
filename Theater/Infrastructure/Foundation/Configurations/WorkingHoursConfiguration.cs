@@ -19,6 +19,11 @@ namespace Infrastructure.Foundation.Configurations
 
             builder.Property( wh => wh.IsWeekend )
                 .IsRequired();
+
+            builder.HasOne( wh => wh.Theater )
+                .WithMany( t => t.WorkingHours )
+                .HasForeignKey( wh => wh.TheaterId )
+                .OnDelete( DeleteBehavior.Cascade );
         }
     }
 }

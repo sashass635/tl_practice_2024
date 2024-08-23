@@ -31,12 +31,14 @@ namespace Infrastructure.Foundation.Configurations
                 .IsRequired();
 
             builder.HasMany( t => t.WorkingHours )
-                .WithOne()
-                .HasForeignKey( wh => wh.TheaterId );
+                .WithOne( wh => wh.Theater )
+                .HasForeignKey( wh => wh.TheaterId )
+                .OnDelete( DeleteBehavior.Cascade );
 
             builder.HasMany( t => t.Plays )
-               .WithOne()
-               .HasForeignKey( p => p.TheaterId );
+               .WithOne( p => p.Theater )
+               .HasForeignKey( p => p.TheaterId )
+               .OnDelete( DeleteBehavior.Cascade );
         }
     }
 }

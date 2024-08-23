@@ -1,4 +1,6 @@
-﻿namespace Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Domain.Entities
 {
     public class Composition
     {
@@ -7,6 +9,9 @@
         public string ShortDescription { get; private init; }
         public string CharactersInfo { get; private init; }
         public int AuthorId { get; private init; }
+        [JsonIgnore]
+        public Author Author { get; private init; }
+        [JsonIgnore]
         public List<Play> Plays { get; private init; } = new List<Play>();
 
         public Composition( string name, string shortDescription, string charactersInfo, int authorId )

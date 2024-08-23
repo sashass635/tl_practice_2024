@@ -8,9 +8,10 @@ public class TheaterDbContext : DbContext
         : base( options )
     {
     }
-    
-    public TheaterDbContext()
+
+    protected override void OnConfiguring( DbContextOptionsBuilder optionsBuilder )
     {
+        optionsBuilder.UseSqlServer( "Server=ALEXANDRA\\SQLEXPRESS;Database=Theater;Trusted_Connection=True;TrustServerCertificate=True;" );
     }
 
     protected override void OnModelCreating( ModelBuilder modelBuilder )

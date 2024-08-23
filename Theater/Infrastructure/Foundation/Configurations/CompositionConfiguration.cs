@@ -24,8 +24,9 @@ namespace Infrastructure.Foundation.Configurations
                 .IsRequired();
 
             builder.HasMany( c => c.Plays )
-                .WithOne()
-                .HasForeignKey( p => p.CompositionId );
+                .WithOne( p => p.Composition )
+                .HasForeignKey( p => p.CompositionId )
+                .OnDelete( DeleteBehavior.Cascade );
         }
     }
 }

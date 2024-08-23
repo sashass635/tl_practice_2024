@@ -1,14 +1,17 @@
-﻿namespace Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace Domain.Entities
 {
     public class Theater
     {
         public int Id { get; private init; }
-        public string Name { get; private init; }
+        public string Name { get; private set; }
         public string Address { get; private init; }
         public DateTime OpeningDate { get; private init; }
-        public List<WorkingHours> WorkingHours { get; private init; }
-        public string Description { get; private init; }
-        public string PhoneNumber { get; private init; }
+        public List<WorkingHours> WorkingHours { get; private init; } = new List<WorkingHours>();
+        public string Description { get; private set; }
+        public string PhoneNumber { get; private set; }
+        [JsonIgnore]
         public List<Play> Plays { get; private init; } = new List<Play>();
 
         public Theater( string name, string address, DateTime openingDate, string description, string phoneNumber )
@@ -41,19 +44,19 @@
 
         public void Update( string name, string description, string phoneNumber )
         {
-            if ( !string.IsNullOrWhiteSpace( Name ) )
+            if ( !string.IsNullOrWhiteSpace( name ) )
             {
-                name = Name;
+                Name = name;
             }
 
-            if ( !string.IsNullOrWhiteSpace( Description ) )
+            if ( !string.IsNullOrWhiteSpace( description ) )
             {
-                description = Description;
+                Description = description;
             }
 
             if ( !string.IsNullOrWhiteSpace( phoneNumber ) )
             {
-                phoneNumber = PhoneNumber;
+                PhoneNumber = phoneNumber;
             }
         }
     }

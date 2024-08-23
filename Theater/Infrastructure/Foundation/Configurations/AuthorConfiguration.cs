@@ -9,18 +9,19 @@ namespace Infrastructure.Foundation.Configurations
         public void Configure( EntityTypeBuilder<Author> builder )
         {
             builder.ToTable( nameof( Author ) )
-                   .HasKey( a => a.Id );
+                    .HasKey( a => a.Id );
 
             builder.Property( a => a.Name )
-                   .HasMaxLength( 150 )
-                   .IsRequired();
+                    .HasMaxLength( 150 )
+                    .IsRequired();
 
             builder.Property( a => a.DateBirth )
-                   .IsRequired();
+                    .IsRequired();
 
             builder.HasMany( a => a.Composition )
-                   .WithOne()
-                   .HasForeignKey( c => c.AuthorId );
+                    .WithOne( c => c.Author )
+                    .HasForeignKey( c => c.AuthorId )
+                    .OnDelete( DeleteBehavior.Cascade );
         }
     }
 }
