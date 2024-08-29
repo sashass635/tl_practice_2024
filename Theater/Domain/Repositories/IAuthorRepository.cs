@@ -2,7 +2,7 @@
 
 namespace Domain.Repositories;
 
-public interface IAuthorRepository : IRepositories<Author>
+public interface IAuthorRepository : IRepository<Author>
 {
     public Author GetById( int id );
 }

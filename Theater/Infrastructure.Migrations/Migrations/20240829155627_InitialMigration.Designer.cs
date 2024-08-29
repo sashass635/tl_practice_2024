@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    [Migration("20240823144232_InitialMigration")]
+    [Migration("20240829155627_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />

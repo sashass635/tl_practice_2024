@@ -5,8 +5,10 @@ namespace Infrastructure.Foundation.Repositories
 {
     public class CompositionRepository : Repository<Composition>, ICompositionRepository
     {
-        public CompositionRepository( TheaterDbContext context )
-            : base( context )
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CompositionRepository( TheaterDbContext context, IUnitOfWork unitOfWork )
+            : base( context, unitOfWork )
         {
         }
 

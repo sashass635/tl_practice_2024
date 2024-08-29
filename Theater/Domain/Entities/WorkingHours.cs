@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class WorkingHours
     {
@@ -9,7 +7,6 @@ namespace Domain.Entities
         public DateTime ClosingDate { get; private init; }
         public bool IsWeekend { get; private init; }
         public int TheaterId { get; private init; }
-        [JsonIgnore]
         public Theater Theater { get; private init; }
 
         public WorkingHours( DateTime openingDate, DateTime closingDate, bool isWeekend )

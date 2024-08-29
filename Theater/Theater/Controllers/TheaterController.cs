@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;
+using Theater.Mappers;
 
 namespace Theater.Controllers
 {
@@ -16,49 +17,44 @@ namespace Theater.Controllers
             _theaterRepository = theaterRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetAllTheaters()
-        {
-            var theaters = _theaterRepository.GetAll();
-
-            return Ok( theaters );
-        }
-
         [HttpGet, Route( "{id:int}" )]
         public IActionResult GetTheater( [FromRoute] int id )
         {
-            var theater = _theaterRepository.GetById( id );
+            Domain.Entities.Theater theater = _theaterRepository.GetById( id );
             if ( theater == null )
             {
                 return NotFound( $"There is no theater with such id = {id}" );
             }
 
-            return Ok( theater );
+            CreateTheaterRequest theaterDTO = TheaterMapper.ToTheaterDTOMap( theater );
+
+            return Ok( theaterDTO );
         }
 
         [HttpPost]
         public IActionResult CreateTheater( [FromBody] CreateTheaterRequest theater )
         {
-            var newTheater = new Domain.Entities.Theater( theater.Name, theater.Address, theater.OpeningDate, theater.Description, theater.PhoneNumber );
+            Domain.Entities.Theater newTheater = new Domain.Entities.Theater( theater.Name, theater.Address, theater.OpeningDate, theater.Description, theater.PhoneNumber );
 
             if ( theater.WorkingHours != null )
             {
-                foreach ( var wh in theater.WorkingHours )
+                foreach ( CreateWorkingHoursRequest wh in theater.WorkingHours )
                 {
-                    var workingHours = new WorkingHours( wh.OpeningDate, wh.ClosingDate, wh.IsWeekend );
+                    WorkingHours workingHours = new WorkingHours( wh.OpeningDate, wh.ClosingDate, wh.IsWeekend );
                     newTheater.WorkingHours.Add( workingHours );
                 }
             }
 
             _theaterRepository.Add( newTheater );
+            CreateTheaterRequest theaterDTO = TheaterMapper.ToTheaterDTOMap( newTheater );
 
-            return Ok( newTheater );
+            return Ok( theaterDTO );
         }
 
         [HttpPut, Route( "{id:int}" )]
         public IActionResult UpdateTheater( [FromRoute] int id, [FromBody] UpdateTheaterRequest theater )
         {
-            var newTheater = _theaterRepository.GetById( id );
+            Domain.Entities.Theater newTheater = _theaterRepository.GetById( id );
 
             if ( newTheater == null )
             {
@@ -66,14 +62,16 @@ namespace Theater.Controllers
             }
 
             newTheater.Update( theater.Name, theater.Description, theater.PhoneNumber );
-            var updatedTheatre = _theaterRepository.Update( id, newTheater );
-            return Ok( updatedTheatre );
+            Domain.Entities.Theater updatedTheatre = _theaterRepository.Update( id, newTheater );
+            CreateTheaterRequest theaterDTO = TheaterMapper.ToTheaterDTOMap( updatedTheatre );
+
+            return Ok( theaterDTO );
         }
 
         [HttpDelete, Route( "{id:int}" )]
         public IActionResult DeletePlay( [FromRoute] int id )
         {
-            var theater = _theaterRepository.GetById( id );
+            Domain.Entities.Theater theater = _theaterRepository.GetById( id );
             if ( theater == null )
             {
                 return NotFound( $"Theater with such id = {id} does not exist" );

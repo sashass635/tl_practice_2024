@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;
+using Theater.Mappers;
 
 namespace Theater.Controllers
 {
@@ -16,14 +17,6 @@ namespace Theater.Controllers
             _workingHoursRepository = workingHoursRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetAllWorkingHours()
-        {
-            List<WorkingHours> workingHoursList = _workingHoursRepository.GetAll();
-
-            return Ok( workingHoursList );
-        }
-
         [HttpGet, Route( "{id:int}" )]
         public IActionResult GetWorkingHours( [FromRoute] int id )
         {
@@ -34,31 +27,33 @@ namespace Theater.Controllers
                 return NotFound( $"There is no working hours with such id = {id}" );
             }
 
-            return Ok( workingHours );
+            CreateWorkingHoursRequest workingHoursDTO = WorkingHoursMapper.ToWorkingHoursDTOMap( workingHours );
+            return Ok( workingHoursDTO );
         }
 
         [HttpGet, Route( "theater/{TheaterId:int}" )]
         public IActionResult GetByTheaterId( [FromRoute] int TheaterId )
         {
             List<WorkingHours> workingHoursList = _workingHoursRepository.GetByTheaterId( TheaterId );
+            List<CreateWorkingHoursRequest> workingHoursDTOs = workingHoursList.Select( WorkingHoursMapper.ToWorkingHoursDTOMap ).ToList();
 
-            return Ok( workingHoursList );
+            return Ok( workingHoursDTOs );
         }
 
         [HttpPost]
         public IActionResult CreateWorkingHours( [FromBody] CreateWorkingHoursRequest workingHours )
         {
             WorkingHours newWorkingHours = new WorkingHours( workingHours.OpeningDate, workingHours.ClosingDate, workingHours.IsWeekend );
-
             _workingHoursRepository.Add( newWorkingHours );
+            WorkingHours workingHoursDTO = WorkingHoursMapper.ToWorkingHoursDTOMap( workingHours );
 
-            return Ok( newWorkingHours );
+            return Ok( workingHoursDTO );
         }
 
         [HttpDelete, Route( "{id:int}" )]
         public IActionResult Delete( [FromRoute] int id )
         {
-            var workingHours = _workingHoursRepository.GetById( id );
+            WorkingHours workingHours = _workingHoursRepository.GetById( id );
 
             if ( workingHours == null )
             {

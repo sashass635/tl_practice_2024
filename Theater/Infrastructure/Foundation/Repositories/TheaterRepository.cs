@@ -3,10 +3,12 @@ using Domain.Repositories;
 
 namespace Infrastructure.Foundation.Repositories
 {
+
     public class TheaterRepository : Repository<Theater>, ITheaterRepository
     {
-        public TheaterRepository( TheaterDbContext context )
-            : base( context )
+        private readonly IUnitOfWork _unitOfWork;
+        public TheaterRepository( TheaterDbContext context, IUnitOfWork unitOfWork )
+            : base( context, unitOfWork )
         {
         }
 
@@ -17,13 +19,13 @@ namespace Infrastructure.Foundation.Repositories
 
         public Theater Update( int id, Theater theater )
         {
-            var oldTheater = _dbContext.Set<Theater>().FirstOrDefault( t => t.Id == id );
+            Theater oldTheater = _dbContext.Set<Theater>().FirstOrDefault( t => t.Id == id );
             if ( theater == null )
             {
                 return null;
             }
             _dbContext.Update( theater );
-            _dbContext.SaveChanges();
+            _unitOfWork.SaveChanges();
 
             return theater;
         }

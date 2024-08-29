@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Domain.Entities
+﻿namespace Domain.Entities
 {
     public class Composition
     {
@@ -9,28 +7,26 @@ namespace Domain.Entities
         public string ShortDescription { get; private init; }
         public string CharactersInfo { get; private init; }
         public int AuthorId { get; private init; }
-        [JsonIgnore]
         public Author Author { get; private init; }
-        [JsonIgnore]
         public List<Play> Plays { get; private init; } = new List<Play>();
 
         public Composition( string name, string shortDescription, string charactersInfo, int authorId )
         {
             if ( string.IsNullOrWhiteSpace( name ) )
             {
-                throw new ArgumentNullException( $"{name} can not be null" );
+                throw new ArgumentNullException( "Name cannot be null or empty" );
             }
             Name = name;
 
             if ( string.IsNullOrWhiteSpace( shortDescription ) )
             {
-                throw new ArgumentNullException( $"{shortDescription} can not be null" );
+                throw new ArgumentNullException( "Short description cannot be null or empty" );
             }
             ShortDescription = shortDescription;
 
             if ( string.IsNullOrWhiteSpace( charactersInfo ) )
             {
-                throw new ArgumentNullException( $"{charactersInfo} can not be null" );
+                throw new ArgumentNullException( "Information about characters cannot be null or empty" );
             }
             CharactersInfo = charactersInfo;
             AuthorId = authorId;

@@ -2,19 +2,21 @@
 
 namespace Infrastructure.Foundation.Repositories
 {
-    public class Repository<T> : IRepositories<T> where T : class
+    public class Repository<T> : IRepository<T> where T : class
     {
         protected readonly TheaterDbContext _dbContext;
+        protected readonly IUnitOfWork _unitOfWork;
 
-        public Repository( TheaterDbContext dbContext )
+        public Repository( TheaterDbContext dbContext, IUnitOfWork unitOfWork )
         {
             _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
         }
 
         public void Add( T item )
         {
             _dbContext.Set<T>().Add( item );
-            _dbContext.SaveChanges();
+            _unitOfWork.SaveChanges();
         }
 
         public List<T> GetAll()
@@ -25,7 +27,7 @@ namespace Infrastructure.Foundation.Repositories
         public void Remove( T item )
         {
             _dbContext.Set<T>().Remove( item );
-            _dbContext.SaveChanges();
+            _unitOfWork.SaveChanges();
         }
     }
 }

@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(TheaterDbContext))]
-    [Migration("20240823144549_CreateWorkingHours")]
+    [Migration("20240829171906_CreateWorkingHours")]
     partial class CreateWorkingHours
     {
         /// <inheritdoc />
@@ -43,7 +43,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Author", (string)null);
+                    b.ToTable("Author");
                 });
 
             modelBuilder.Entity("Domain.Entities.Composition", b =>
@@ -76,7 +76,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("AuthorId");
 
-                    b.ToTable("Composition", (string)null);
+                    b.ToTable("Composition");
                 });
 
             modelBuilder.Entity("Domain.Entities.Play", b =>
@@ -118,7 +118,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TheaterId");
 
-                    b.ToTable("Play", (string)null);
+                    b.ToTable("Play");
                 });
 
             modelBuilder.Entity("Domain.Entities.Theater", b =>
@@ -154,7 +154,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Theater", (string)null);
+                    b.ToTable("Theater");
                 });
 
             modelBuilder.Entity("Domain.Entities.WorkingHours", b =>
@@ -181,7 +181,7 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("TheaterId");
 
-                    b.ToTable("WorkingHours", (string)null);
+                    b.ToTable("WorkingHours");
                 });
 
             modelBuilder.Entity("Domain.Entities.Composition", b =>

@@ -5,11 +5,11 @@ namespace Infrastructure.Foundation.Repositories
 {
     public class WorkingHoursRepository : Repository<WorkingHours>, IWorkingHoursRepository
     {
-        public WorkingHoursRepository( TheaterDbContext context )
-            : base( context )
+        private readonly IUnitOfWork _unitOfWork;
+        public WorkingHoursRepository( TheaterDbContext context, IUnitOfWork unitOfWork )
+            : base( context, unitOfWork )
         {
         }
-
         public WorkingHours GetById( int id )
         {
             return _dbContext.Set<WorkingHours>().FirstOrDefault( wh => wh.Id == id );

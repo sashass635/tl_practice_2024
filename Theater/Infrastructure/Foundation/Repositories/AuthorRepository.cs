@@ -5,8 +5,10 @@ namespace Infrastructure.Foundation.Repositories
 {
     public class AuthorRepository : Repository<Author>, IAuthorRepository
     {
-        public AuthorRepository( TheaterDbContext context )
-            : base( context )
+        private readonly IUnitOfWork _unitOfWork;
+
+        public AuthorRepository( TheaterDbContext context, IUnitOfWork unitOfWork )
+            : base( context, unitOfWork )
         {
         }
 

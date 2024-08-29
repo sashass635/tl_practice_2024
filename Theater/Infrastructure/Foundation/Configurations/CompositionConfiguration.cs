@@ -8,8 +8,7 @@ namespace Infrastructure.Foundation.Configurations
     {
         public void Configure( EntityTypeBuilder<Composition> builder )
         {
-            builder.ToTable( nameof( Composition ) )
-                .HasKey( c => c.Id );
+            builder.HasKey( c => c.Id );
 
             builder.Property( c => c.Name )
                 .HasMaxLength( 150 )

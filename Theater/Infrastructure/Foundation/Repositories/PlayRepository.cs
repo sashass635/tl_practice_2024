@@ -5,11 +5,12 @@ namespace Infrastructure.Foundation.Repositories
 {
     public class PlayRepository : Repository<Play>, IPlayRepository
     {
-        public PlayRepository( TheaterDbContext context )
-            : base( context )
+        private readonly IUnitOfWork _unitOfWork;
+
+        public PlayRepository( TheaterDbContext context, IUnitOfWork unitOfWork )
+            : base( context, unitOfWork )
         {
         }
-
         public Play GetById( int id )
         {
             return _dbContext.Set<Play>().FirstOrDefault( p => p.Id == id );

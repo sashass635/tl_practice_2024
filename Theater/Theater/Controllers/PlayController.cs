@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;
+using Theater.Mappers;
 
 namespace Theater.Controllers
 {
@@ -16,14 +17,6 @@ namespace Theater.Controllers
             _playRepository = playRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetAllPlays()
-        {
-            List<Play> plays = _playRepository.GetAll();
-
-            return Ok( plays );
-        }
-
         [HttpGet, Route( "{id:int}" )]
         public IActionResult GetPlay( [FromRoute] int id )
         {
@@ -33,33 +26,36 @@ namespace Theater.Controllers
                 return NotFound( $"There is no composition with such id = {id}" );
             }
 
-            return Ok( play );
+            CreatePlayRequest playDTO = PlayMapper.ToPlayDTOMap( play );
+            return Ok( playDTO );
         }
 
         [HttpGet, Route( "theater/{theaterid:int}" )]
         public IActionResult GetByTheaterId( [FromRoute] int theaterid )
         {
             List<Play> play = _playRepository.GetByTheaterId( theaterid );
+            List<CreatePlayRequest> playsDTO = play.Select( PlayMapper.ToPlayDTOMap ).ToList();
 
-            return Ok( play );
+            return Ok( playsDTO );
         }
 
         [HttpGet, Route( "composition/{compositionId:int}" )]
         public IActionResult GetByCompositionId( [FromRoute] int compositionId )
         {
             List<Play> play = _playRepository.GetByCompositionId( compositionId );
+            List<CreatePlayRequest> playsDTO = play.Select( PlayMapper.ToPlayDTOMap ).ToList();
 
-            return Ok( play );
+            return Ok( playsDTO );
         }
 
         [HttpPost]
         public IActionResult CreatePlay( [FromBody] CreatePlayRequest play )
         {
             Play newPlay = new Play( play.Name, play.StartDate, play.EndDate, play.TicketPrice, play.Description, play.TheaterId, play.CompositionId );
-
             _playRepository.Add( newPlay );
+            CreatePlayRequest playDTO = PlayMapper.ToPlayDTOMap( newPlay );
 
-            return Ok( newPlay );
+            return Ok( playDTO );
         }
 
         [HttpDelete, Route( "{id:int}" )]

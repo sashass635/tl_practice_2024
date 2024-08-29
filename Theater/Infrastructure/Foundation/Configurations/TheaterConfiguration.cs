@@ -8,8 +8,7 @@ namespace Infrastructure.Foundation.Configurations
     {
         public void Configure( EntityTypeBuilder<Theater> builder )
         {
-            builder.ToTable( nameof( Theater ) )
-                .HasKey( t => t.Id );
+            builder.HasKey( t => t.Id );
 
             builder.Property( t => t.Name )
                 .HasMaxLength( 30 )

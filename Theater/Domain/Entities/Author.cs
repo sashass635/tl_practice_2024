@@ -11,7 +11,7 @@
         {
             if ( string.IsNullOrWhiteSpace( name ) )
             {
-                throw new ArgumentNullException( $"{name} can not be null" );
+                throw new ArgumentNullException( "Author name cannot be null or empty" );
             }
 
             Name = name;

@@ -1,10 +1,12 @@
 using Domain.Repositories;
 using Infrastructure.Foundation;
 using Infrastructure.Foundation.Repositories;
+using Infrastructure.Implementations;
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder( args );
+WebApplicationBuilder builder = WebApplication.CreateBuilder( args );
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<ITheaterRepository, TheaterRepository>();
 builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 builder.Services.AddScoped<IAuthorRepository, AuthorRepository>();
@@ -15,7 +17,7 @@ string connectionString = builder.Configuration.GetConnectionString( "Theater" )
 builder.Services.AddDbContext<TheaterDbContext>( o =>
 {
     o.UseSqlServer( connectionString,
-        ob => ob.MigrationsAssembly( typeof( TheaterDbContext ).Assembly.FullName ) );
+        ob => ob.MigrationsAssembly( "Infrastructure.Migrations" ) );
 } );
 
 builder.Services.AddControllers();

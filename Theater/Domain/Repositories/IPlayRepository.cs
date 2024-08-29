@@ -2,7 +2,7 @@
 
 namespace Domain.Repositories;
 
-public interface IPlayRepository : IRepositories<Play>
+public interface IPlayRepository : IRepository<Play>
 {
     public Play GetById( int id );
     public List<Play> GetByTheaterId( int TheaterId );

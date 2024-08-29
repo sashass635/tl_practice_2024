@@ -2,6 +2,7 @@
 using Domain.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Theater.Contracts.Requests;
+using Theater.Mappers;
 
 namespace Theater.Controllers
 {
@@ -16,14 +17,6 @@ namespace Theater.Controllers
             _authorRepository = authorRepository;
         }
 
-        [HttpGet]
-        public IActionResult GetAllAuthors()
-        {
-            List<Author> authors = _authorRepository.GetAll();
-
-            return Ok( authors );
-        }
-
         [HttpGet, Route( "{id:int}" )]
         public IActionResult GetAuthor( [FromRoute] int id )
         {
@@ -33,7 +26,9 @@ namespace Theater.Controllers
                 return NotFound( $"There is no author with such id = {id}" );
             }
 
-            return Ok( author );
+            CreateAuthorRequest authorDTO = AuthorMapper.ToAuthorDTOMap( author );
+
+            return Ok( authorDTO );
         }
 
         [HttpPost]
@@ -41,8 +36,9 @@ namespace Theater.Controllers
         {
             Author newAuthor = new Author( author.Name, author.DateBirth ); ;
             _authorRepository.Add( newAuthor );
+            CreateAuthorRequest authorDTO = AuthorMapper.ToAuthorDTOMap( newAuthor );
 
-            return Ok( newAuthor );
+            return Ok( authorDTO );
         }
 
         [HttpDelete, Route( "{id:int}" )]
@@ -55,6 +51,7 @@ namespace Theater.Controllers
             }
 
             _authorRepository.Remove( author );
+
             return Ok();
         }
     }
