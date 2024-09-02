@@ -1,26 +1,23 @@
 import { useState } from "react";
 import { CardSet } from "../types/CardSet";
-import { AddNewSet, DeleteAppSet } from "../types/Application";
+import { useStore } from "../hooks/useStore";
 
 type ManageCardSetsProps = {
-  application: { cardsSet: CardSet[] };
-  setApplication: (app: { cardsSet: CardSet[] }) => void;
   handleSelectSet: (set: CardSet) => void;
 };
 
-export const ManageCardSets = ({ application, setApplication, handleSelectSet }: ManageCardSetsProps) => {
+export const ManageCardSets = ({ handleSelectSet }: ManageCardSetsProps) => {
   const [newSetName, setNewSetName] = useState("");
+  const { application, actions } = useStore();
 
   const handleAddSet = () => {
     if (newSetName.trim() === "") return;
-    const updatedApp = AddNewSet(application, newSetName);
-    setApplication(updatedApp);
+    actions.addCardSet(newSetName);
     setNewSetName("");
   };
 
   const handleDeleteSet = (id: string) => {
-    const updatedApp = DeleteAppSet(application, id);
-    setApplication(updatedApp);
+    actions.deleteCardSet(id);
   };
 
   return (

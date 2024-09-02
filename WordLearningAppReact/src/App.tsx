@@ -2,11 +2,11 @@ import { useState } from "react";
 import { CardSet } from "./types/CardSet";
 import { AllCards } from "./components/AllCards";
 import { ManageCardSets } from "./components/ManageCardSets";
+import { useStore } from "./hooks/useStore";
 import { LearningProcess } from "./components/LearningProcessView";
 
 const App = () => {
-  const [application, setApplication] = useState({ cardsSet: [] as CardSet[] });
-  const [currentSet, setCurrentSet] = useState<CardSet | null>(null);
+  const { currentSet, actions } = useStore();
   const [mode, setMode] = useState<"start" | "manage" | "learn" | "allCards">("start");
 
   const handleStartLearning = () => {
@@ -14,13 +14,13 @@ const App = () => {
   };
 
   const handleSelectSet = (set: CardSet) => {
-    setCurrentSet(set);
+    actions.setCurrentSet(set);
     setMode("learn");
   };
 
   const handleBackToSets = () => {
     setMode("manage");
-    setCurrentSet(null);
+    actions.setCurrentSet(null);
   };
 
   const handleViewAllCards = () => {
@@ -41,9 +41,7 @@ const App = () => {
       );
 
     case "manage":
-      return (
-        <ManageCardSets application={application} setApplication={setApplication} handleSelectSet={handleSelectSet} />
-      );
+      return <ManageCardSets handleSelectSet={handleSelectSet} />;
 
     case "learn":
       if (currentSet) {
@@ -59,15 +57,7 @@ const App = () => {
 
     case "allCards":
       if (currentSet) {
-        return (
-          <AllCards
-            currentSet={currentSet}
-            setCurrentSet={setCurrentSet}
-            application={application}
-            setApplication={setApplication}
-            handleBackToLearning={handleBackToLearning}
-          />
-        );
+        return <AllCards handleBackToLearning={handleBackToLearning} />;
       }
       break;
 

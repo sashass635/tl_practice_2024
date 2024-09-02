@@ -1,58 +1,45 @@
 import { useState } from "react";
-import { CardSet } from "../types/CardSet";
-import { CreateCard, UpdateCard, DeleteCard } from "../types/Card";
+import { useStore } from "../hooks/useStore";
 
 type AllCardsProps = {
-  currentSet: CardSet;
-  setCurrentSet: (set: CardSet | null) => void;
-  application: { cardsSet: CardSet[] };
-  setApplication: (app: { cardsSet: CardSet[] }) => void;
   handleBackToLearning: () => void;
 };
 
-export const AllCards = ({
-  currentSet,
-  setCurrentSet,
-  application,
-  setApplication,
-  handleBackToLearning,
-}: AllCardsProps) => {
+export const AllCards = ({ handleBackToLearning }: AllCardsProps) => {
+  const { currentSet, actions } = useStore((state) => ({
+    currentSet: state.currentSet,
+    actions: state.actions,
+  }));
+
   const [newWord, setNewWord] = useState("");
   const [newTranslation, setNewTranslation] = useState("");
 
   const handleCreateCard = () => {
-    if (newWord.trim() && newTranslation.trim()) {
-      const updatedSet = CreateCard(newWord, newTranslation, currentSet);
-      const updatedApp = {
-        ...application,
-        cardsSet: [...application.cardsSet, updatedSet],
-      };
-      setApplication(updatedApp);
-      setCurrentSet(updatedSet);
+    if (currentSet && newWord.trim() && newTranslation.trim()) {
+      actions.addCardToSet(currentSet.id, newWord, newTranslation);
       setNewWord("");
       setNewTranslation("");
+      actions.setCurrentSet(currentSet);
     }
   };
 
   const handleUpdateCard = (id: string, updatedWord: string, updatedTranslation: string) => {
-    const updatedSet = UpdateCard(currentSet, id, updatedWord, updatedTranslation);
-    const updatedApp = {
-      ...application,
-      cardsSet: [...application.cardsSet, updatedSet],
-    };
-    setApplication(updatedApp);
-    setCurrentSet(updatedSet);
+    if (currentSet) {
+      actions.updateCardInSet(currentSet.id, id, updatedWord, updatedTranslation);
+      actions.setCurrentSet(currentSet);
+    }
   };
 
   const handleDeleteCard = (id: string) => {
-    const updatedSet = DeleteCard(currentSet, id);
-    const updatedApp = {
-      ...application,
-      cardsSet: [...application.cardsSet, updatedSet],
-    };
-    setApplication(updatedApp);
-    setCurrentSet(updatedSet);
+    if (currentSet) {
+      actions.deleteCardFromSet(currentSet.id, id);
+      actions.setCurrentSet(currentSet);
+    }
   };
+
+  if (!currentSet) {
+    return <div>No set selected.</div>;
+  }
 
   return (
     <div>
@@ -90,11 +77,9 @@ export const AllCards = ({
               </p>
               <button
                 onClick={() => {
-                  handleUpdateCard(
-                    card.id,
-                    prompt("New Word:", card.word) ?? card.word,
-                    prompt("New Translation:", card.translation) ?? card.translation,
-                  );
+                  const updatedWord = prompt("New Word:", card.word) ?? card.word;
+                  const updatedTranslation = prompt("New Translation:", card.translation) ?? card.translation;
+                  handleUpdateCard(card.id, updatedWord, updatedTranslation);
                 }}
               >
                 Edit

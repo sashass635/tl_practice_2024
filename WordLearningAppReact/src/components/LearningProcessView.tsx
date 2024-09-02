@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CardSet } from "../types/CardSet";
-import { StartLearningProcess, MarkCardAsLearned, MoveCardToBottom } from "../types/LearningProcess";
+import { useStore } from "../hooks/useStore";
 
 type LearningProcessProps = {
   currentSet: CardSet;
@@ -9,8 +9,7 @@ type LearningProcessProps = {
 };
 
 export const LearningProcess = ({ currentSet, handleBackToSets, handleViewAllCards }: LearningProcessProps) => {
-  const [learningProcess, setLearningProcess] = useState(StartLearningProcess(currentSet));
-  const [currentCardIndex, setCurrentCardIndex] = useState(0);
+  const { actions } = useStore();
   const [showTranslation, setShowTranslation] = useState(false);
 
   const handleToggleTranslation = () => {
@@ -18,34 +17,31 @@ export const LearningProcess = ({ currentSet, handleBackToSets, handleViewAllCar
   };
 
   const handleNextCard = () => {
-    const randomIndex = Math.floor(Math.random() * learningProcess.unlearnedCards.length);
-    setCurrentCardIndex(randomIndex);
     setShowTranslation(false);
   };
 
   const handleMarkAsLearned = () => {
-    const updatedProcess = MarkCardAsLearned(learningProcess, learningProcess.unlearnedCards[currentCardIndex].id);
-    setLearningProcess(updatedProcess);
+    actions.markCardAsLearned(currentSet.id);
     handleNextCard();
   };
 
   const handleMoveToBottom = () => {
-    const updatedProcess = MoveCardToBottom(learningProcess, learningProcess.unlearnedCards[currentCardIndex].id);
-    setLearningProcess(updatedProcess);
+    actions.moveCardToBottom(currentSet.id);
     handleNextCard();
   };
+
 
   return (
     <div>
       <h1>Learning Process</h1>
-      {learningProcess.unlearnedCards.length > 0 ? (
+      {currentSet.cards.length > 0 ? (
         <div>
           <p>
-            <strong>Word:</strong> {learningProcess.unlearnedCards[currentCardIndex].word}
+            <strong>Word:</strong> {currentSet.cards[0].word}
           </p>
           {showTranslation && (
             <p>
-              <strong>Translation:</strong> {learningProcess.unlearnedCards[currentCardIndex].translation}
+              <strong>Translation:</strong> {currentSet.cards[0].translation}
             </p>
           )}
           <button onClick={handleToggleTranslation}>{showTranslation ? "Hide Translation" : "Show Translation"}</button>

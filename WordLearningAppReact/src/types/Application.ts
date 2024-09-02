@@ -1,22 +1,25 @@
-import { CardSet, CreateSet, DeleteSet } from "./CardSet";
+import { createSet, deleteSet, CardSet } from "./CardSet";
 
-export type Application = {
-  cardsSet: CardSet[];
+export type Application ={
+    cardsSet: CardSet[];
 };
 
-const AddNewSet = (app: Application, name: string): Application => {
-  const newSet = CreateSet(name);
-  return {
-    ...app,
-    cardsSet: [...app.cardsSet, newSet],
-  };
+const addNewSet = (app: Application, name: string): Application => {
+    const newSet = createSet(name);
+    return {
+        ...app,
+        cardsSet: [...app.cardsSet, newSet]
+    };
 };
 
-const DeleteAppSet = (app: Application, id: string): Application => {
-  return {
-    ...app,
-    cardsSet: DeleteSet(app.cardsSet, id),
-  };
-};
+const deleteAppSet = (app: Application, id: string): Application => {
+    return {
+        ...app,
+        cardsSet: deleteSet(app.cardsSet, id)
+    };
+}
 
-export { AddNewSet, DeleteAppSet };
+export {
+    addNewSet,
+    deleteAppSet
+}
